@@ -5,7 +5,7 @@ set -eu
 THREADS=12
 
 # input the files to be trimmed with space to separate
-echo "SQ24018630-dV1-dV1_combined_R2.fastq.gz"
+echo "Please enter file name/.fastq.gz e.g. Sample_SQ24018630-dV1-dV1/SQ24018630-dV1-dV1_combined_R2.fastq.gz. Separate fastq.gz by space"
 read -ra FILES_TO_PROCESS
 
 for fq in "${FILES_TO_PROCESS[@]}"; do
