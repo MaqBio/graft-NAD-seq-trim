@@ -1,0 +1,6 @@
+# Convert gff file to gtf file
+# agat_convert_sp_gff2gtf.pl -i Fragaria_vesca_v6_genome.gff -o Fragaria_vesca_v6_genome.gtf
+
+# Build up an index
+# STAR --runThreadN 4 --runMode genomeGenerate --genomeSAindexNbases 12 --sjdbGTFfile Fragaria_vesca_v6_genome.gtf --genomeDir /Data05/quanma/ref_genome/Fv_t2t --genomeFastaFiles Fragaria_vesca_v6_genome.fasta --sjdbGTFfeatureExon CDS
+
