@@ -4,3 +4,11 @@
 # Build up an index
 # STAR --runThreadN 4 --runMode genomeGenerate --genomeSAindexNbases 12 --sjdbGTFfile Fragaria_vesca_v6_genome.gtf --genomeDir /Data05/quanma/ref_genome/Fv_t2t --genomeFastaFiles Fragaria_vesca_v6_genome.fasta --sjdbGTFfeatureExon CDS
 
+# Mapping
+# STAR --runThreadN 15 --outFilterMismatchNmax 0 --outFilterMultimapNmax 1 --genomeDir /Data05/quanma/ref_genome/Fv_t2t --readFilesCommand gunzip -c --readFilesIn dV4_processed_output.fq.gz --outFileNamePrefix "dV4_" --outSAMtype BAM SortedByCoordinate --limitBAMsortRAM 8000000000
+
+# extract the reads through Script of Diep
+./featureCounts_v3-gtf.sh dV1Aligned.sortedByCoord.out.bam SE 1 /Data05/quanma/ref_genome/Fv_t2t/Fragaria_vesca_v6_genome.gtf gene
+./featureCounts_v3-gtf.sh dV2Aligned.sortedByCoord.out.bam SE 1 /Data05/quanma/ref_genome/Fv_t2t/Fragaria_vesca_v6_genome.gtf gene
+./featureCounts_v3-gtf.sh dV3Aligned.sortedByCoord.out.bam SE 1 /Data05/quanma/ref_genome/Fv_t2t/Fragaria_vesca_v6_genome.gtf gene
+./featureCounts_v3-gtf.sh dV4Aligned.sortedByCoord.out.bam SE 1 /Data05/quanma/ref_genome/Fv_t2t/Fragaria_vesca_v6_genome.gtf gene
