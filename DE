@@ -18,7 +18,8 @@
 ./featureCounts_v3-gtf.sh dV4Aligned.sortedByCoord.out.bam SE 1 /Data05/quanma/ref_genome/Fv_t2t/Fragaria_vesca_v6_genome.gtf gene
 
 # get a summary of readcounts
-featureCounts -F GTF -C -T 8 -M -t gene -g gene_id -O -s 1 -a /Data05/quanma/ref_genome/Fv_t2t/Fragaria_vesca_v6_genome.gtf \
--o dV.txt --fraction dV1Aligned.sortedByCoord.out.bam dV2Aligned.sortedByCoord.out.bam dV3Aligned.sortedByCoord.out.bam dV4Aligned.sortedByCoord.out.bam
+featureCounts -F GTF -C -T 8 -M -t gene -g gene_id -O -s 1 -a /Data05/quanma/ref_genome/TAIR10/Arabidopsis_thaliana.TAIR10.60.gtf \
+-o T_merge.txt --fraction T1_Aligned.sortedByCoord.out.bam T3_Aligned.sortedByCoord.out.bam T_merged_Neg.bam
 
-cut -f 1,7- dV.txt > dV_counts_matrix.txt
+cut -f 1,7- W_merge.txt > W_merge_matrix.txt
+cut -f 1,7- T_merge.txt > T_merge_matrix.txt
