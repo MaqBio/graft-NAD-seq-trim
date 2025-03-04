@@ -12,9 +12,8 @@ GTF=$2
 shift 2  # Shift the parameters, make sure the parameters after the first 2 were samples
 
 # Set up the max threads
-TOTAL_THREADS=30
-THREADS_PER_SAMPLE=6
-MAX_JOBS=$((TOTAL_THREADS / THREADS_PER_SAMPLE)) # Parallar samples
+THREADS_PER_SAMPLE=10
+MAX_JOBS=2  # Two samples run in parallel
 
 # Determine f(x) for mapping
 run_hisat2() {
@@ -64,7 +63,7 @@ run_hisat2() {
 
 export -f run_hisat2
 
-# Run HISAT2+SAMtools for different samples in parallal. The limitation of samples running were restricted by THREADS_PER_SAMPLE and the total threads were limited under 30
+# Run HISAT2+SAMtools for different samples in parallel. We will limit parallel jobs to 2 at a time.
 echo "Starting parallel HISAT2 alignment..."
 parallel -j "$MAX_JOBS" run_hisat2 {} "$INDEX" ::: "$@"
 
