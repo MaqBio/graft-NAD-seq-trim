@@ -1,9 +1,13 @@
 # Build index for farr1
 # First extract exon and splicing sites
+agat_convert_sp_gff2gtf.pl -i farr1.gene_models.gff -o farr1.gene_models.gtf
 hisat2_extract_exons.py farr1.gene_models.gtf > /Hisat2_index/exons_farr1.txt
-hisat2_extract_splice_sites.py farr1.gene_models.gtf > /Hisat2_index/ss_farr1.txt
+hisat2_extract_splice_sites.py farr1.gene_models.gtf > ss_farr1.txt
 
-hisat2-build -p 20 farr1.fa farr1 #Index should locate at the same file of .fa file
+hisat2-build --ss ss_farr1.txt --exon exons_farr1.txt -p 20 farr1.fa farr1 #Index should locate at the same file of .fa file
+
+#Quality control
+fastp -i $fq_1.clean.fq.gz  -I $fq_2.clean.fq.gz -l 30 -w 10 -u 20 -n 6 -o $fq_1.filted.fastq.gz -O $fq_2.filted.fastq.gz 
 
 #Mapping through hisat2
 hisat2 -p 20 --dta -x /data48t/quanmazju/Ref_genome/Fragaria_ananassa/farr1 -1 F4_1.clean.fq.gz -2 F4_2.clean.fq.gz -S /data48t/quanmazju/SPAAC-seq/1_hisat2.rep/F4_dta.sam
