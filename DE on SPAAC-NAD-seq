@@ -1,0 +1,30 @@
+# Build index for farr1
+# First extract exon and splicing sites
+hisat2_extract_exons.py farr1.gene_models.gtf > /Hisat2_index/exons_farr1.txt
+hisat2_extract_splice_sites.py farr1.gene_models.gtf > /Hisat2_index/ss_farr1.txt
+
+hisat2-build -p 20 farr1.fa farr1 #Index should locate at the same file of .fa file
+
+#Mapping through hisat2
+hisat2 -p 20 --dta -x /data48t/quanmazju/Ref_genome/Fragaria_ananassa/farr1 -1 F4_1.clean.fq.gz -2 F4_2.clean.fq.gz -S /data48t/quanmazju/SPAAC-seq/1_hisat2.rep/F4_dta.sam
+hisat2 -p 20 --dta -x /data48t/quanmazju/Ref_genome/fchil_org/fchil_mito -1 F4_1.clean.fq.gz -2 F4_2.clean.fq.gz -S /data48t/quanmazju/SPAAC-seq/1_hisat2/F4_dta_mito.sam
+hisat2 -p 20 --dta -x /data48t/quanmazju/Ref_genome/Chil/Fchil -1 F4_1.clean.fq.gz -2 F4_2.clean.fq.gz -S /data48t/quanmazju/SPAAC-seq/1_hisat2.rep/F4_chil.sam
+#transfer to bam and sort
+samtools view -@ 38 -b -o F4_dta_mito.bam F4_dta_mito.sam
+samtools sort -o F4_mito.sorted.bam -@ 40 F4_dta_mito.bam
+samtools view -@ 38 -b -o F4_dta.bam F4_dta.sam
+samtools sort -o F4.sorted.bam -@ 20 F4_dta.bam
+samtools view -@ 38 -b -o F4_chil.bam F4_chil.sam
+samtools sort -o F4_chil.sorted.bam -@ 40 F4_chil.bam
+#quantify by stringtie
+stringtie F4_mito.sorted.bam \
+-p 8 -G /data48t/quanmazju/Ref_genome/fchil_org/fchil_mito.gtf \
+-o F4_mito.stringtie.gtf
+
+stringtie F4.sorted.bam \
+-p 8 -G /data48t/quanmazju/Ref_genome/Fragaria_ananassa/farr1.gene_models.gff \
+-o F4_rep.stringtie.gtf
+
+stringtie F4_chil.sorted.bam \
+-p 40 -G /data48t/quanmazju/Ref_genome/Chil/Fchil_hap1.repeat.gff3 \
+-o F4_rep.gtf
