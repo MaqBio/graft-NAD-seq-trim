@@ -88,6 +88,6 @@ fi
 # Run featureCounts on the sorted BAM files
 echo "Running featureCounts on sorted BAM files..."
 featureCounts -F GTF -C -T 20 -M -t gene -g gene_id -O -p -a "$GTF" \
-    -o merged.txt --fraction "${SORTED_BAM_FILES[@]}"
+    -o merged.txt "${SORTED_BAM_FILES[@]}"
 
 echo "All samples processed successfully."
