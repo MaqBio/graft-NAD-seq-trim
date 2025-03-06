@@ -1,0 +1,10 @@
+# cleanup the fasta sequence
+seqtk seq -A fragaria_rRNA.fasta > cleaned_fragaria_rRNA.fasta
+
+# build up the index
+hisat2-build cleaned_fragaria_rRNA.fasta cleaned_fragaria_rRNA_index
+
+# Hisat2 exlude the rRNA sequence
+hisat2 --summary-file EV_Input_rep1_1_rRNA_summary.txt -p 25 \
+    -x /Data05/quanma/ref_genome/Fa_rRNA/cleaned_fragaria_rRNA_index \
+    -U EV_IP_rep1_1.filted.fastq.gz -S rRNA.sam
