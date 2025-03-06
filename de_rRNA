@@ -8,3 +8,6 @@ hisat2-build cleaned_fragaria_rRNA.fasta cleaned_fragaria_rRNA_index
 hisat2 --summary-file EV_Input_rep1_1_rRNA_summary.txt -p 25 \
     -x /Data05/quanma/ref_genome/Fa_rRNA/cleaned_fragaria_rRNA_index \
     -U EV_IP_rep1_1.filted.fastq.gz -S rRNA.sam
+
+featureCounts -F GTF -C -T 20 -M -t gene -g gene_id -O -a /Data05/quanma/ref_genome/Fa/mRNA.gtf \
+    -o merged.txt $(find . -type f -name "*_sorted.bam")
