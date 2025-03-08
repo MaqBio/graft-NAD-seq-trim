@@ -1,9 +1,25 @@
-featureCounts -T 10 -t exon -g gene_id -p -a /Data05/quanma/ref_genome/Fa/mRNA.gtf -o exon_counts.txt EV_IP_rep1_sorted.bam
-featureCounts -T 10 -t transcript -g gene_id -p -a /Data05/quanma/ref_genome/Fa/mRNA.gtf -o transcript_counts.txt EV_IP_rep1_sorted.bam
-awk 'NR>2 {print $1, $7}' transcript_counts.txt > transcript_reads.txt
-awk 'NR>2 {print $1, $7}' exon_counts.txt > exon_reads.txt
-join transcript_reads.txt exon_reads.txt | awk '{print $1, $2-$3}' > intron_reads.txt
+# Get bed files for exon/intron/intergenic
+awk '$3 == "exon" {
+    match($0, /transcript_id "[^"]+"/);
+    if (RSTART) {
+        tid = substr($0, RSTART+15, RLENGTH-16);
+        print $1, $4-1, $5, tid, ".", $7;
+    }
+}' mRNA.gtf | tr ' ' '\t' > exon.bed
 
-total_reads=$(samtools view -c input.bam)
-mapped_to_genes=$(awk '{sum += $2} END {print sum}' gene_counts.txt)
-intergenic_reads=$((total_reads - mapped_to_genes))
+awk '$3 == "transcript" {
+    match($0, /transcript_id "[^"]+"/);
+    if (RSTART) {
+        tid = substr($0, RSTART+15, RLENGTH-16);
+        print $1, $4-1, $5, tid, ".", $7;
+    }
+}' mRNA.gtf | tr ' ' '\t' > transcript.bed
+
+bedtools subtract -a transcript.bed -b exon.bed > intron.bed
+
+# Sort transcript.bed file first
+sort -k1,1 -k2,2n transcript.bed > transcript_sorted.bed
+bedtools complement -i transcript.bed -g genome.chrom.sizes > intergenic.bed
+
+# 
+bedtools coverage -a /Data05/quanma/ref_genome/Fa/intergenic.bed -b EV_IP_rep1_sorted.bam > intergenic_coverage.txt
