@@ -34,3 +34,6 @@ stringtie F4_chil.sorted.bam \
 -o F4_rep.gtf
 
 ./mapcount.bash /Data05/quanma/ref_genome/Fa/farr1 /Data05/quanma/ref_genome/mRNA.gtf EV_Input_rep1 EV_IP_rep2 OE_Input_rep1 OE_IP_rep2 EV_Input_rep2 OE_Input_rep2 EV_IP_rep1 OE_IP_rep1
+
+featureCounts -F GTF -C -T 20 -M -t transcript -p -g transcript_id -O -a /Data05/quanma/ref_genome/Fa/mRNA.gtf \
+    -o merged.txt $(find . -type f -name "*_sorted.bam")
