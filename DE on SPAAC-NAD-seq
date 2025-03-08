@@ -1,8 +1,8 @@
 # Build index for farr1
 # First extract exon and splicing sites
 agat_convert_sp_gff2gtf.pl -i farr1.gene_models.gff -o farr1.gene_models.gtf
-hisat2_extract_exons.py farr1.gene_models.gtf > /Hisat2_index/exons_farr1.txt
-hisat2_extract_splice_sites.py farr1.gene_models.gtf > ss_farr1.txt
+hisat2_extract_exons.py mRNA.gtf > exons_farr1.txt
+hisat2_extract_splice_sites.py mRNA.gtf > ss_farr1.txt
 
 hisat2-build --ss ss_farr1.txt --exon exons_farr1.txt -p 20 farr1.fa farr1 #Index should locate at the same file of .fa file
 
@@ -32,3 +32,5 @@ stringtie F4.sorted.bam \
 stringtie F4_chil.sorted.bam \
 -p 40 -G /data48t/quanmazju/Ref_genome/Chil/Fchil_hap1.repeat.gff3 \
 -o F4_rep.gtf
+
+./mapcount.bash /Data05/quanma/ref_genome/Fa/farr1 /Data05/quanma/ref_genome/mRNA.gtf EV_Input_rep1 EV_IP_rep2 OE_Input_rep1 OE_IP_rep2 EV_Input_rep2 OE_Input_rep2 EV_IP_rep1 OE_IP_rep1
