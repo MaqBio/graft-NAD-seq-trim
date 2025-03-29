@@ -23,3 +23,8 @@ bedtools complement -i transcript.bed -g genome.chrom.sizes > intergenic.bed
 
 # 
 bedtools coverage -a /Data05/quanma/ref_genome/Fa/intergenic.bed -b EV_IP_rep1_sorted.bam > intergenic_coverage.txt
+
+
+ ./readcounts.bash /Data05/quanma/ref_genome/Fa/mRNA.gtf transcript OE.feature.txt OE_IP_rep1 OE_IP_rep2 OE_Input_rep1 OE_Input_rep2
+
+featureCounts -F GTF -C -T 20 -M -t transcript -p -g transcript_id -O -a /Data05/quanma/ref_genome/Fa/mRNA.gtf -o merged.txt ./EV_Input_rep1/EV_Input_rep1_sorted.bam ./EV_Input_rep2/EV_Input_rep2_sorted.bam ./EV_IP_rep1/EV_IP_rep1_sorted.bam ./EV_IP_rep2/EV_IP_rep2_sorted.bam ./OE_Input_rep1/OE_Input_rep1_sorted.bam ./OE_Input_rep2/OE_Input_rep2_sorted.bam ./OE_IP_rep1/OE_IP_rep1_sorted.bam ./OE_IP_rep2/OE_IP_rep2_sorted.bam  
