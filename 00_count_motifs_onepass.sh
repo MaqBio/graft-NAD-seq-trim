@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# -----------------------------
+# count_motifs_onepass.sh
+#
+# Usage:
+#   bash count_motifs_onepass.sh <*_combined_R2.fastq.gz> [out.tsv]
+#
+# Optional env:
+#   PIGZ_THREADS=4   # threads used by pigz per sample (if pigz exists)
+#
+# Example:
+#   PIGZ_THREADS=4 bash count_motifs_onepass.sh sample_R2.fastq.gz sample.motif.tsv
+# -----------------------------
+
 fq="${1:?Usage: $0 <*_combined_R2.fastq.gz> [out.tsv]}"
 out="${2:-/dev/stdout}"
 
-# ================== 配置区===================
+# ============ 配置区：你在这里输入 ============
 P7CONST="GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCTC"
 
 # 这里就是你的 motif 列表（单独的 b）
@@ -15,11 +28,14 @@ motifs=(
   "TCTTCT"
   "TCTTC"
 )
+
+# 每个样本解压用多少线程（默认 2）；运行时也可用环境变量覆盖
+PIGZ_THREADS="${PIGZ_THREADS:-2}"
 # ============================================
 
-# 更快解压：pigz > gzip
+# 选择更快的解压器：pigz > gzip
 if command -v pigz >/dev/null 2>&1; then
-  DECOMPRESS=(pigz -dc)     # 需要更快可改成：pigz -p 8 -dc
+  DECOMPRESS=(pigz -p "$PIGZ_THREADS" -dc)
 else
   DECOMPRESS=(gzip -dc)
 fi
