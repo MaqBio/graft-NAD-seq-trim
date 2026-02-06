@@ -1,0 +1,12 @@
+# Check barcode in the R2 reads by seqkit
+# e.g.: R2 of NX3
+fq=/labs/lilab/maq/graft/dxo1/Sample_JZ25250036-WA1-WA1/JZ25250036-WA1-WA1_combined_R2.fastq.gz
+
+# Total reads（fastq a read = 4 rows）
+total=$(zcat "$fq" | awk 'END{print NR/4}')
+echo "TOTAL $total"
+
+for m in TCTTCTTGT TCTTCTTG TCTTCTT TCTTCT TCTTC; do
+  n=$(seqkit grep -s -p "$m" "$fq" | grep -c '^@')
+  awk -v n="$n" -v t="$total" -v m="$m" 'BEGIN{printf "%s\t%d\t%.4f\n", m, n, 100*n/t}'
+done
